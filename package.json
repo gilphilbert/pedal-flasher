@@ -1,18 +1,14 @@
 {
   "name": "typescript",
-  "version": "1.0.0",
-  "description": "This an example of using esptool-js with parcel and typescript",
+  "version": "0.0.1",
+  "description": "Web Flasher for DIY FFB Pedal",
   "source": "src/index.html",
   "scripts": {
-    "genDocs": "cd ../.. && npm run genDocs && mkdir -p examples/typescript/dist && cp -r docs examples/typescript/dist && cd examples/typescript",
-    "dev": "npm run clean && npm run genDocs && parcel src/index.html",
-    "build": "npm run clean && npm run genDocs && parcel build src/index.html --no-optimize --public-url ./",
-    "clean": "rimraf dist .parcel-cache",
+    "dev": "npm run clean && parcel src/index.html",
+    "build": "npm run clean && parcel build src/index.html --no-optimize --public-url ./ --dist-dir docs",
+    "clean": "rimraf docs .parcel-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "parcelIgnore": [
-    "./docs/.+"
-  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
