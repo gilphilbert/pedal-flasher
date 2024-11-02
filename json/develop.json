@@ -1,0 +1,32 @@
+{
+    "Configurations": [
+        {
+            "Board": "PCBAv1",
+            "Version": "0.87.1",
+            "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
+            "Offset": "0x0000",
+            "Chip": "ESP32-S3"
+        },    
+        {
+            "Board": "V3",
+            "Version": "0.87.1",
+            "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/firmware.bin",
+            "Offset": "0x1000",
+            "Chip": "ESP32-D0WD"
+        },
+        {
+            "Board": "V4",
+            "Version": "0.87.1",
+            "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32S3/firmware.bin",
+            "Offset": "0x0000",
+            "Chip": "ESP32-S3"
+        },
+        {
+            "Board": "Speedcrafter",
+            "Version": "0.87.1",
+            "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/firmware.bin",
+            "Offset": "0x1000",
+            "Chip": "ESP32-D0WD"
+        }
+    ]
+}
