@@ -637,7 +637,9 @@ successNotice.style.display = "none";
 failureNotice.style.display = "none";
 const espLoaderTerminal = {
     clean () {
-        term.clear();
+    //this is called automatically after the flash is called
+    //we will remove it for now since we don't want it to be cleared
+    //term.clear()
     },
     writeLine (data) {
         term.writeln(data);
@@ -694,6 +696,7 @@ connectButton.onclick = async ()=>{
     }
     try {
         connectButton.value = "Connecting...";
+        term.clear();
         const flashOptions = {
             transport,
             baudrate: 921600,
