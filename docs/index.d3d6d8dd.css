@@ -55,6 +55,11 @@ input[type="submit"].button-clear {
 
 .button.button-warning, button.button-warning, input[type="button"].button-warning, input[type="reset"].button-warning, input[type="submit"].button-warning, input[type="submit"].button-warning {
   color: #3d3d3d;
+  background-color: #f9c935;
+  border-color: #f9c935;
+}
+
+.button.button-success, button.button-success, input[type="button"].button-success, input[type="reset"].button-success, input[type="submit"].button-success, input[type="submit"].button-success {
   background-color: #41bb8a;
   border-color: #41bb8a;
 }
@@ -121,4 +126,4 @@ div.section.gray {
   height: 100%;
   font-weight: 700;
 }
-/*# sourceMappingURL=index.d91dee8f.css.map */
+/*# sourceMappingURL=index.d3d6d8dd.css.map */

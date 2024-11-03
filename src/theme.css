@@ -70,12 +70,12 @@ input[type="submit"].button-warning {
     color: #3d3d3d
 }
 
-.button.button-warning,
-button.button-warning,
-input[type="button"].button-warning,
-input[type="reset"].button-warning,
-input[type="submit"].button-warning,
-input[type="submit"].button-warning {
+.button.button-success,
+button.button-success,
+input[type="button"].button-success,
+input[type="reset"].button-success,
+input[type="submit"].button-success,
+input[type="submit"].button-success {
     background-color: #41BB8A;
     border-color: #41BB8A;
 }
