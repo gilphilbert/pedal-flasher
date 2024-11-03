@@ -1,210 +1,248 @@
-const connectButton = document.getElementById("connectButton") as HTMLButtonElement;
-const disconnectButton = document.getElementById("disconnectButton") as HTMLButtonElement;
-const programButton = document.getElementById("programButton") as HTMLButtonElement;
-const terminal = document.getElementById("terminal") as HTMLDivElement;
-const lblConnTo = document.getElementById("lblConnTo") as HTMLLabelElement;
-const alertDiv = document.getElementById("alertDiv") as HTMLDivElement;
+const connectButton = document.getElementById("connectButton") as HTMLButtonElement
+const disconnectButton = document.getElementById("disconnectButton") as HTMLButtonElement
+const programButton = document.getElementById("programButton") as HTMLButtonElement
+const terminal = document.getElementById("terminal") as HTMLDivElement
+const lblConnTo = document.getElementById("lblConnTo") as HTMLLabelElement
+const alertDiv = document.getElementById("alertDiv") as HTMLDivElement
+const boardType = document.getElementById('boardType') as HTMLSelectElement
+const board = document.getElementById('boardName') as HTMLSelectElement
+const channel = document.getElementById('channel') as HTMLSelectElement
+const lblFirmwareVersion = document.getElementById('lblFirmwareVersion') as HTMLLabelElement
+const safariWarning = document.getElementById('safariWarning') as HTMLDivElement
+const consoleButton = document.getElementById('consoleButton') as HTMLButtonElement
+const progressBar = document.getElementById('progressBar') as HTMLDivElement
+const successNotice = document.getElementById('successNotice') as HTMLDivElement
+const failureNotice = document.getElementById('failureNotice') as HTMLDivElement
+const failureMessage = document.getElementById('failureMessage') as HTMLParagraphElement
 
-const board = document.getElementById('board-name') as HTMLSelectElement;
-const lblFirmwareVersion = document.getElementById('lblFirmwareVersion') as HTMLLabelElement;
+import { ESPLoader, FlashOptions, LoaderOptions, Transport } from "esptool-js"
+import { serial } from "web-serial-polyfill"
+if (!navigator.serial && navigator.usb) navigator.serial = serial
 
-//const debugLogging = document.getElementById("debugLogging") as HTMLInputElement;
+declare let Terminal 
+declare let CryptoJS
 
-// This is a frontend example of Esptool-JS using local bundle file
-// To optimize use a CDN hosted version like
-// https://unpkg.com/esptool-js@0.2.0/bundle.js
-import { ESPLoader, FlashOptions, LoaderOptions, Transport } from "esptool-js";
-import { serial } from "web-serial-polyfill";
-if (!navigator.serial && navigator.usb) navigator.serial = serial;
+const term = new Terminal({ cols: 80, rows: 24, 'theme': { background: '#333' } })
+term.open(terminal)
 
-declare let Terminal; // Terminal is imported in HTML script
-declare let CryptoJS; // CryptoJS is imported in HTML script
+const urls = {
+  control: {
+    dev: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/dev/Version_ControlBoard.json",
+    main: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/main/Version_ControlBoard.json",
+  },
+  bridge: {
+    dev: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/dev/Version_Bridge.json",
+    main: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/main/Version_Bridge.json",
+  }
+}
 
-const term = new Terminal({ cols: 80, rows: 24, 'theme': { background: '#333' } });
-term.open(terminal);
-
-const releaseURL:string = "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/develop.json";
-//const developURL:string = "../json/develop.json"
-
-let device = null;
-let transport: Transport;
-let chip: string = null;
-let esploader: ESPLoader;
+let device = null
+let transport: Transport
+let chip: string = null
+let esploader: ESPLoader
 
 interface BoardFirmware {
-  board: string;
-  version: string;
-  url: string;
-  offset: string;
-  chip: string;
+  board: string
+  description: string
+  version: string
+  url: string
+  chip: string
 }
 
-let boardFirmwares: Array<BoardFirmware> = [];
+let boardFirmwares: Array<BoardFirmware> = []
 
-disconnectButton.style.display = "none";
-programButton.style.display = "none";
+safariWarning.style.display = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 ? "none" : "block"
 
-/**
- * The built in Event object.
- * @external Event
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Event}
- */
-
-/**
- * File reader handler to read given local file.
- * @param {Event} evt File Select event
- */
-/*
-function handleFileSelect(evt) {
-  const file = evt.target.files[0];
-
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = (ev: ProgressEvent<FileReader>) => {
-    evt.target.data = ev.target.result;
-  };
-
-  reader.readAsBinaryString(file);
-}
-*/
-
-board.onchange = () => {
-  //const _selectedBoard:Array<BoardFirmware> = boardFirmwares.filter(el => el.board = board.value);
-  //if (_selectedBoard.length > 0)
-  //  selectedBoard = _selectedBoard[0];
-  lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version;
-}
+boardType.disabled = true
+channel.disabled = true
+board.disabled = true
+programButton.disabled = true
+disconnectButton.style.display = "none"
+terminal.style.display = "none"
+successNotice.style.display = "none"
+failureNotice.style.display = "none"
 
 const espLoaderTerminal = {
   clean() {
-    term.clear();
+    term.clear()
   },
   writeLine(data) {
-    term.writeln(data);
+    term.writeln(data)
   },
   write(data) {
-    term.write(data);
+    term.write(data)
   },
-};
+}
+
+function getFirmwareJSON() {
+  console.log(boardType.value)
+  console.log(channel.value)
+  console.log(urls[boardType.value][channel.value])
+  fetch(urls[boardType.value][channel.value])
+    .then(response => response.json())
+    .then(json => {
+      const len = board.options.length
+      for (let i = len - 1; i >= 0; i--)
+        board.options.remove(0)
+
+      let optionEnabled = false
+      boardFirmwares = []
+
+      json.Configurations.forEach(jsondata => {
+        const firmware:BoardFirmware = {
+          board: jsondata.Board,
+          description: jsondata.Description,
+          version: jsondata.Version,
+          url: jsondata.URL.slice(0, jsondata.URL.lastIndexOf("/") + 1),
+          chip: jsondata.Chip
+        }
+        boardFirmwares.push(firmware)
+
+        if (board.childElementCount == 0)
+          lblFirmwareVersion.innerText = "Firmware version: " + firmware.version
+
+        const opt:HTMLOptionElement = document.createElement('option')
+        opt.value = firmware.board
+        opt.innerHTML = firmware.description
+        opt.disabled = chip.startsWith(firmware.chip) ? false : true
+        board.appendChild(opt)
+
+        optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false
+      })
+      programButton.disabled = !optionEnabled
+    })
+}
+
+channel.onchange = () => { getFirmwareJSON() }
+boardType.onchange = () => { getFirmwareJSON()}
+board.onchange = () => {
+  lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version
+}
+
+consoleButton.onclick = () => {
+  terminal.style.display = terminal.style.display == "none" ? "block" : "none"
+}
 
 connectButton.onclick = async () => {
   if (device === null) {
-    device = await navigator.serial.requestPort({});
-    transport = new Transport(device, true);
+    device = await navigator.serial.requestPort({})
+    transport = new Transport(device, false)
   }
 
   try {
+    connectButton.value = "Connecting..."
     const flashOptions = {
       transport,
       baudrate: 921600,
       terminal: espLoaderTerminal,
       debugLogging: false  //debugLogging: debugLogging.checked,
-    } as LoaderOptions;
-    esploader = new ESPLoader(flashOptions);
+    } as LoaderOptions
+    esploader = new ESPLoader(flashOptions)
 
-    chip = await esploader.main();
+    chip = await esploader.main()
 
     // Temporarily broken
-    // await esploader.flashId();
+    // await esploader.flashId()
+    lblConnTo.innerHTML = "Connected device: " + chip
+    lblConnTo.style.display = "block"
+    connectButton.style.display = "none"
+    connectButton.value = "Connect"
+    disconnectButton.style.display = "initial"
+    channel.disabled = false
+    boardType.disabled = false
+    board.disabled = false
+
+    getFirmwareJSON()
   } catch (e) {
-    console.error(e);
-    term.writeln(`Error: ${e.message}`);
+    console.error(e)
+    term.writeln(`Error: ${e.message}`)
+    connectButton.value = "Connect"
   }
 
-  console.log("Settings done for :" + chip);
-  lblConnTo.innerHTML = "Connected to device: " + chip;
-  lblConnTo.style.display = "block";
-  connectButton.style.display = "none";
-  disconnectButton.style.display = "initial";
-  programButton.style.display = "initial";
-};
+  console.log("Settings done for :" + chip)
+}
 
 /**
  * Clean devices variables on chip disconnect. Remove stale references if any.
  */
 function cleanUp() {
-  device = null;
-  transport = null;
-  chip = null;
+  device = null
+  transport = null
+  chip = null
 }
 
 disconnectButton.onclick = async () => {
-  if (transport) await transport.disconnect();
+  if (transport) await transport.disconnect()
 
-  term.reset();
-  connectButton.style.display = "initial";
-  disconnectButton.style.display = "none";
-  programButton.style.display = "none";
-  lblConnTo.style.display = "none";
-  alertDiv.style.display = "none";
-  cleanUp();
-};
+  term.reset()
+  connectButton.style.display = "initial"
+  disconnectButton.style.display = "none"
+  programButton.disabled = true
 
-async function getFile(url:string) {
-  let response = await fetch(url);
-  let data = await response.blob();
-  let metadata = {
-    type: data.type
-  };
-  return new File([data], "firmware.bin", metadata);
-  // ... do something with the file or return it
+  channel.disabled = true
+  boardType.disabled = true
+  board.disabled = true
+  lblConnTo.style.display = "none"
+  alertDiv.style.display = "none"
+  cleanUp()
 }
 
-/**
- * Validate the provided files images and offset to see if they're valid.
- * @returns {string} Program input validation result
- */
+async function getFile(url:string) {
+  const ret = new Promise(async (resolve, reject) => {
+    let response = await fetch(url)
+    let data = await response.blob()
+  
+    const reader = new FileReader()
+  
+    reader.onload = (ev: ProgressEvent<FileReader>) => {
+      resolve(ev.target.result)
+    }
+  
+    reader.readAsBinaryString(data)
+  
+  })
+  return ret
+}
+
 function validateProgramInputs() {
-  //get a list of all boards with the board name selected
-  //const _boards:Array<BoardFirmware> = boardFirmwares.filter(el => el.board = board.value);
-  //  if (_boards.length > 0) {
-  //    const _board:BoardFirmware = _boards[0];
   if (chip.startsWith(boardFirmwares[board.selectedIndex].chip))
-    return "success";
-  //}
-  return "Incorrect chip for this board";
+    return "success"
+  return "Incorrect chip for this board"
 }
 
 programButton.onclick = async () => {
-  const alertMsg = document.getElementById("alertmsg");
-  const err = validateProgramInputs();
+  const alertMsg = document.getElementById("alertmsg")
+  const err = validateProgramInputs()
+
+  programButton.disabled = true
+  successNotice.style.display = "none"
+  failureNotice.style.display = "none"
+  failureMessage.innerHTML = ""
 
   if (err != "success") {
-    alertMsg.innerHTML = "<strong>" + err + "</strong>";
-    alertDiv.style.display = "block";
-    return;
+    alertMsg.innerHTML = "<strong>" + err + "</strong>"
+    alertDiv.style.display = "block"
+    return
   }
 
   // Hide error message
-  alertDiv.style.display = "none";
+  alertDiv.style.display = "none"
 
-  const fileArray = [];
-  //const progressBars = [];
+  const fileArray = []
 
-  const firmwareFile:File = await getFile(boardFirmwares[board.selectedIndex].url);
+  const fileList = [
+    { file: boardFirmwares[board.selectedIndex].url + 'bootloader.bin', offset: chip.startsWith("ESP32-D0WD") ? 0x1000 : 0x0000 },
+    { file: boardFirmwares[board.selectedIndex].url + 'partitions.bin', offset: 0x8000 },
+    { file: boardFirmwares[board.selectedIndex].url + 'boot_app0.bin', offset: 0xe000 },
+    { file: boardFirmwares[board.selectedIndex].url + 'firmware.bin', offset: 0x10000 }
+  ]
 
-  fileArray.push({ data: await firmwareFile.text(), address: "0" /*boardFirmwares[board.selectedIndex].offset*/ })
-  /*
-  for (let index = 1; index < table.rows.length; index++) {
-    const row = table.rows[index];
+  for (let i = 0; i < fileList.length; i++) {
+    const el = fileList[i]
 
-    const offSetObj = row.cells[0].childNodes[0] as HTMLInputElement;
-    const offset = parseInt(offSetObj.value);
-
-    const fileObj = row.cells[1].childNodes[0] as ChildNode & { data: string };
-    const progressBar = row.cells[2].childNodes[0];
-
-    progressBar.textContent = "0";
-    progressBars.push(progressBar);
-
-    row.cells[2].style.display = "initial";
-    row.cells[3].style.display = "none";
-
-    fileArray.push({ data: fileObj.data, address: offset });
+    //need a way to detect download failure
+    fileArray.push({ data: await getFile(el.file), address: el.offset })
   }
-  */
 
   
   try {
@@ -213,46 +251,25 @@ programButton.onclick = async () => {
       flashSize: "keep",
       eraseAll: false,
       compress: true,
-      //reportProgress: (fileIndex, written, total) => {
-      //  progressBars[fileIndex].value = (written / total) * 100;
-      //},
+      reportProgress: (fileIndex, written, total) => {
+        const perc = Math.round((fileIndex * 25) + ((written / total) * 100 / 4)) + '%'
+        progressBar.style.width = perc
+        progressBar.innerHTML = perc + ' (' + (fileIndex + 1) + '/4)'
+      },
       calculateMD5Hash: (image) => CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image)),
-    } as FlashOptions;
-    await esploader.writeFlash(flashOptions);
+    } as FlashOptions
+    await esploader.writeFlash(flashOptions)
+    successNotice.style.display = "block"
+    disconnectButton.click()
   } catch (e) {
-    console.error(e);
-    term.writeln(`Error: ${e.message}`);
+    console.error(e)
+    term.writeln(`Error: ${e.message}`)
+    failureNotice.style.display = "block"
+    failureMessage.innerHTML = e.message
   } finally {
-    // Hide progress bars and show erase buttons
-    //for (let index = 1; index < table.rows.length; index++) {
-    //  table.rows[index].cells[2].style.display = "none";
-    //  table.rows[index].cells[3].style.display = "initial";
-    //}
+    programButton.disabled = false
+    progressBar.style.width = "0"
+    progressBar.innerHTML = ""
   }
   
-};
-
-fetch(releaseURL)
-  .then(response => response.json())
-  .then(json => {
-    json.Configurations.forEach(jsondata => {
-      const firmware:BoardFirmware = {
-        board: jsondata.Board,
-        version: jsondata.Version,
-        url: jsondata.URL,
-        offset: jsondata.Offset,
-        chip: jsondata.Chip
-      }
-      boardFirmwares.push(firmware);
-
-      if (board.childElementCount == 0)
-        lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
-
-      const opt:HTMLOptionElement = document.createElement('option');
-      opt.value = firmware.board;
-      opt.innerHTML = firmware.board;
-      board.appendChild(opt);
-
-    });
-
-  });
+}

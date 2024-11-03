@@ -3,102 +3,87 @@
     <head>
         <meta charset="utf-8">
         <title>DIY FFB Firmware Flasher</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
-        <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,700">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
+        <link rel="stylesheet" href="/index.2a6c8018.css">
+
         <link rel="icon" href="/favicon.eee7a1e8.ico">
          <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-         <style>.callout {
-  border: 1px solid #e9ecef;
-  border-left-width: 5px;
-  border-radius: 5px;
-  margin: 10px 0;
-  padding: 18px;
-}
-
-.callout .title {
-  font-weight: bold;
-}
-
-.callout-info {
-  border-left-color: #5bc0de;
-}
-
-.callout-warning {
-  border-left-color: #f0ad4e;
-}
-
-.callout-danger {
-  border-left-color: #d43f3a;
-}
-
-div {
-  padding: 10px 0;
-}
-</style>
     </head>
     <body>
-        <h1 align="center"><p><img src="/diy-ffb-pedal-logo.e77342ba.png" width="42" height="42" style="vertical-align: middle" crossorigin=""> Web Flasher</p></h1>
-        <h4 align="center">Firmware flash tool for <a href="https://github.com/ChrGri/DIY-Sim-Racing-FFB-Pedal">DIY FFB Pedal</a></h4>
-        <div id="safariErr" style="display: none"><p align="center" style="color: red">This tool is not supported on Safari browser!</p>
+        <div class="section gray">
+            <div class="container">
+                <h1><img src="/diy-ffb-pedal-logo.e77342ba.png" width="42" height="42" style="vertical-align: middle" crossorigin=""> Web Flasher</h1>
+                <h4>Firmware flash tool for the <a href="https://github.com/ChrGri/DIY-Sim-Racing-FFB-Pedal">DIY FFB Pedal</a> project</h4>
+            </div>
         </div>
-        <div class="container" id="main">
-            <form>
-                <div id="program">
-                    <h3>Program</h3>
+        <div class="section">
 
-                    <div>
-                        <label for="board-name" id="lblBoardName">Select a board:</label>
-                        <select name="board-name" id="board-name"></select>
-                    </div>                
+            <div class="container">
 
-                    <div>
+                <div id="safariWarning" class="callout callout-danger">
+                    <p class="title">Unsupported</p>
+                    This tool is not supported on Safari Browser. Please use a Chromium-based brower (Chrome, Edge, Brave, etc.)
+                </div>
+
+                <div class="callout callout-info">
+                    <p class="title">Get your board ready</p>
+                    Start with the board unplugged. Hold the "Flash" or "Boot" button on the board and plug it in to this computer - the board is now ready to flash new firmware. Click the "Connect" button below.
+                </div>
+                <input class="button-primary" type="button" id="connectButton" value="Connect">
+                <input class="button-warning" type="button" id="disconnectButton" value="Disconnect">
+
+                <form>
+                    <fieldset>
+
+                        <label id="lblConnTo">Connected device: (none)</label>
+
+                        <label for="boardType" id="lblBoardType">Board type:</label>
+                        <select name="boardType" id="boardType">
+                            <option value="control">Control Board</option>
+                            <option value="bridge">Wireless Controller (Bridge)</option>
+                        </select>
+
                         <label for="channel" id="lblChannel">Channel:</label>
                         <select name="channel" id="channel">
-                            <option value="stable">Stable (Recommended)</option>
+                            <option value="main">Stable (Recommended)</option>
                             <option value="dev">Development</option>
                         </select>
-                    </div>
-                    <div>
+
+                        <label for="boardName" id="lblBoardName">Select a board:</label>
+                        <select name="boardName" id="boardName"></select>
+
                         <label id="lblFirmwareVersion">Firmware version:</label>
-                    </div>
 
-                    <div class="callout callout-info">
-                        <p class="title">Get your board ready</p>
-                        Start with the board unplugged. Hold the "Flash" or "Boot" button on the board and plug it in to this computer - the board is now ready to flash new firmware.
-                    </div>
+                        <input class="button-primary" type="button" id="programButton" value="Flash Firmware">
 
-                    <div>
-                        <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Connect">
-                        <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect">
-                        <input class="btn btn-info btn-sm" type="button" id="programButton" value="Program">
-                    </div>
+                        <div class="progress" id="progress">
+                            <div class="bar" id="progressBar"></div>
+                        </div>
 
-                    <div class="alert alert-danger alert-dismissible" id="alertDiv" style="margin-top: 10px; display: none">
-                        <a href="#" class="close" aria-label="close" onclick="$('.alert').hide()">&times;</a>
-                        <span id="alertmsg"></span>
-                    </div>
+                        <div class="callout callout-success" id="successNotice">
+                            <p>Firmware flashed successfully</p>
+                        </div>
+                        <div class="callout callout-danger" id="failureNotice">
+                            <p>Firmware flashing failed</p>
+                            <p id="failureMessage"></p>
+                        </div>
 
-                </div>
-            </form>
-            <label id="lblConnTo">Connected to device: </label>
+                        <div class="alert alert-danger alert-dismissible" id="alertDiv" style="margin-top: 10px; display: none">
+                            <a href="#" class="close" aria-label="close" onclick="$('.alert').hide()">&times;</a>
+                            <span id="alertmsg"></span>
+                        </div>
 
-            <br><br>
-            <div id="terminal"></div>
+                    </fieldset>
+                </form>
+
+                <input class="button-outline" type="button" id="consoleButton" value="Show console">
+                <div id="terminal"></div>
+            </div>
         </div>
         <script src="/index.b71e74eb.js" defer=""></script>
-        <script>// Safari 3.0+ "[object HTMLElementConstructor]"
-var isSafari = /constructor/i.test(window.HTMLElement) || function(p) {
-    return p.toString() === "[object SafariRemoteNotification]";
-}(!window["safari"] || typeof safari !== "undefined" && window["safari"].pushNotification);
-if (isSafari) {
-    document.getElementById("safariErr").style.display = "inline";
-    document.getElementById("main").style.display = "none";
-}
-
-</script>
     </body>
 </html>

@@ -584,10 +584,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"h7u1C":[function(require,module,exports) {
-//const debugLogging = document.getElementById("debugLogging") as HTMLInputElement;
-// This is a frontend example of Esptool-JS using local bundle file
-// To optimize use a CDN hosted version like
-// https://unpkg.com/esptool-js@0.2.0/bundle.js
 var _esptoolJs = require("esptool-js");
 var _webSerialPolyfill = require("web-serial-polyfill");
 const connectButton = document.getElementById("connectButton");
@@ -596,8 +592,16 @@ const programButton = document.getElementById("programButton");
 const terminal = document.getElementById("terminal");
 const lblConnTo = document.getElementById("lblConnTo");
 const alertDiv = document.getElementById("alertDiv");
-const board = document.getElementById("board-name");
+const boardType = document.getElementById("boardType");
+const board = document.getElementById("boardName");
+const channel = document.getElementById("channel");
 const lblFirmwareVersion = document.getElementById("lblFirmwareVersion");
+const safariWarning = document.getElementById("safariWarning");
+const consoleButton = document.getElementById("consoleButton");
+const progressBar = document.getElementById("progressBar");
+const successNotice = document.getElementById("successNotice");
+const failureNotice = document.getElementById("failureNotice");
+const failureMessage = document.getElementById("failureMessage");
 if (!navigator.serial && navigator.usb) navigator.serial = (0, _webSerialPolyfill.serial);
 const term = new Terminal({
     cols: 80,
@@ -607,42 +611,30 @@ const term = new Terminal({
     }
 });
 term.open(terminal);
-const releaseURL = "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/develop.json";
-//const developURL:string = "../json/develop.json"
+const urls = {
+    control: {
+        dev: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/dev/Version_ControlBoard.json",
+        main: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/main/Version_ControlBoard.json"
+    },
+    bridge: {
+        dev: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/dev/Version_Bridge.json",
+        main: "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/main/Version_Bridge.json"
+    }
+};
 let device = null;
 let transport;
 let chip = null;
 let esploader;
 let boardFirmwares = [];
+safariWarning.style.display = navigator.userAgent.toLowerCase().indexOf("safari/") > -1 ? "none" : "block";
+boardType.disabled = true;
+channel.disabled = true;
+board.disabled = true;
+programButton.disabled = true;
 disconnectButton.style.display = "none";
-programButton.style.display = "none";
-/**
- * The built in Event object.
- * @external Event
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Event}
- */ /**
- * File reader handler to read given local file.
- * @param {Event} evt File Select event
- */ /*
-function handleFileSelect(evt) {
-  const file = evt.target.files[0];
-
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = (ev: ProgressEvent<FileReader>) => {
-    evt.target.data = ev.target.result;
-  };
-
-  reader.readAsBinaryString(file);
-}
-*/ board.onchange = ()=>{
-    //const _selectedBoard:Array<BoardFirmware> = boardFirmwares.filter(el => el.board = board.value);
-    //if (_selectedBoard.length > 0)
-    //  selectedBoard = _selectedBoard[0];
-    lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version;
-};
+terminal.style.display = "none";
+successNotice.style.display = "none";
+failureNotice.style.display = "none";
 const espLoaderTerminal = {
     clean () {
         term.clear();
@@ -654,12 +646,54 @@ const espLoaderTerminal = {
         term.write(data);
     }
 };
+function getFirmwareJSON() {
+    console.log(boardType.value);
+    console.log(channel.value);
+    console.log(urls[boardType.value][channel.value]);
+    fetch(urls[boardType.value][channel.value]).then((response)=>response.json()).then((json)=>{
+        const len = board.options.length;
+        for(let i = len - 1; i >= 0; i--)board.options.remove(0);
+        let optionEnabled = false;
+        boardFirmwares = [];
+        json.Configurations.forEach((jsondata)=>{
+            const firmware = {
+                board: jsondata.Board,
+                description: jsondata.Description,
+                version: jsondata.Version,
+                url: jsondata.URL.slice(0, jsondata.URL.lastIndexOf("/") + 1),
+                chip: jsondata.Chip
+            };
+            boardFirmwares.push(firmware);
+            if (board.childElementCount == 0) lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
+            const opt = document.createElement("option");
+            opt.value = firmware.board;
+            opt.innerHTML = firmware.description;
+            opt.disabled = chip.startsWith(firmware.chip) ? false : true;
+            board.appendChild(opt);
+            optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false;
+        });
+        programButton.disabled = !optionEnabled;
+    });
+}
+channel.onchange = ()=>{
+    getFirmwareJSON();
+};
+boardType.onchange = ()=>{
+    getFirmwareJSON();
+};
+board.onchange = ()=>{
+    lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version;
+};
+consoleButton.onclick = ()=>{
+    terminal.style.display = terminal.style.display == "none" ? "block" : "none";
+};
 connectButton.onclick = async ()=>{
     if (device === null) {
         device = await navigator.serial.requestPort({});
-        transport = new (0, _esptoolJs.Transport)(device, true);
+        transport = new (0, _esptoolJs.Transport)(device, false);
     }
     try {
+        connectButton.value = "Connecting...";
         const flashOptions = {
             transport,
             baudrate: 921600,
@@ -668,18 +702,23 @@ connectButton.onclick = async ()=>{
         };
         esploader = new (0, _esptoolJs.ESPLoader)(flashOptions);
         chip = await esploader.main();
-    // Temporarily broken
-    // await esploader.flashId();
+        // Temporarily broken
+        // await esploader.flashId()
+        lblConnTo.innerHTML = "Connected device: " + chip;
+        lblConnTo.style.display = "block";
+        connectButton.style.display = "none";
+        connectButton.value = "Connect";
+        disconnectButton.style.display = "initial";
+        channel.disabled = false;
+        boardType.disabled = false;
+        board.disabled = false;
+        getFirmwareJSON();
     } catch (e) {
         console.error(e);
         term.writeln(`Error: ${e.message}`);
+        connectButton.value = "Connect";
     }
     console.log("Settings done for :" + chip);
-    lblConnTo.innerHTML = "Connected to device: " + chip;
-    lblConnTo.style.display = "block";
-    connectButton.style.display = "none";
-    disconnectButton.style.display = "initial";
-    programButton.style.display = "initial";
 };
 /**
  * Clean devices variables on chip disconnect. Remove stale references if any.
@@ -693,37 +732,37 @@ disconnectButton.onclick = async ()=>{
     term.reset();
     connectButton.style.display = "initial";
     disconnectButton.style.display = "none";
-    programButton.style.display = "none";
+    programButton.disabled = true;
+    channel.disabled = true;
+    boardType.disabled = true;
+    board.disabled = true;
     lblConnTo.style.display = "none";
     alertDiv.style.display = "none";
     cleanUp();
 };
 async function getFile(url) {
-    let response = await fetch(url);
-    let data = await response.blob();
-    let metadata = {
-        type: data.type
-    };
-    return new File([
-        data
-    ], "firmware.bin", metadata);
-// ... do something with the file or return it
+    const ret = new Promise(async (resolve, reject)=>{
+        let response = await fetch(url);
+        let data = await response.blob();
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+            resolve(ev.target.result);
+        };
+        reader.readAsBinaryString(data);
+    });
+    return ret;
 }
-/**
- * Validate the provided files images and offset to see if they're valid.
- * @returns {string} Program input validation result
- */ function validateProgramInputs() {
-    //get a list of all boards with the board name selected
-    //const _boards:Array<BoardFirmware> = boardFirmwares.filter(el => el.board = board.value);
-    //  if (_boards.length > 0) {
-    //    const _board:BoardFirmware = _boards[0];
+function validateProgramInputs() {
     if (chip.startsWith(boardFirmwares[board.selectedIndex].chip)) return "success";
-    //}
     return "Incorrect chip for this board";
 }
 programButton.onclick = async ()=>{
     const alertMsg = document.getElementById("alertmsg");
     const err = validateProgramInputs();
+    programButton.disabled = true;
+    successNotice.style.display = "none";
+    failureNotice.style.display = "none";
+    failureMessage.innerHTML = "";
     if (err != "success") {
         alertMsg.innerHTML = "<strong>" + err + "</strong>";
         alertDiv.style.display = "block";
@@ -732,70 +771,59 @@ programButton.onclick = async ()=>{
     // Hide error message
     alertDiv.style.display = "none";
     const fileArray = [];
-    //const progressBars = [];
-    const firmwareFile = await getFile(boardFirmwares[board.selectedIndex].url);
-    fileArray.push({
-        data: await firmwareFile.text(),
-        address: "0" /*boardFirmwares[board.selectedIndex].offset*/ 
-    });
-    /*
-  for (let index = 1; index < table.rows.length; index++) {
-    const row = table.rows[index];
-
-    const offSetObj = row.cells[0].childNodes[0] as HTMLInputElement;
-    const offset = parseInt(offSetObj.value);
-
-    const fileObj = row.cells[1].childNodes[0] as ChildNode & { data: string };
-    const progressBar = row.cells[2].childNodes[0];
-
-    progressBar.textContent = "0";
-    progressBars.push(progressBar);
-
-    row.cells[2].style.display = "initial";
-    row.cells[3].style.display = "none";
-
-    fileArray.push({ data: fileObj.data, address: offset });
-  }
-  */ try {
+    const fileList = [
+        {
+            file: boardFirmwares[board.selectedIndex].url + "bootloader.bin",
+            offset: chip.startsWith("ESP32-D0WD") ? 0x1000 : 0x0000
+        },
+        {
+            file: boardFirmwares[board.selectedIndex].url + "partitions.bin",
+            offset: 0x8000
+        },
+        {
+            file: boardFirmwares[board.selectedIndex].url + "boot_app0.bin",
+            offset: 0xe000
+        },
+        {
+            file: boardFirmwares[board.selectedIndex].url + "firmware.bin",
+            offset: 0x10000
+        }
+    ];
+    for(let i = 0; i < fileList.length; i++){
+        const el = fileList[i];
+        //need a way to detect download failure
+        fileArray.push({
+            data: await getFile(el.file),
+            address: el.offset
+        });
+    }
+    try {
         const flashOptions = {
             fileArray: fileArray,
             flashSize: "keep",
             eraseAll: false,
             compress: true,
-            //reportProgress: (fileIndex, written, total) => {
-            //  progressBars[fileIndex].value = (written / total) * 100;
-            //},
+            reportProgress: (fileIndex, written, total)=>{
+                const perc = Math.round(fileIndex * 25 + written / total * 100 / 4) + "%";
+                progressBar.style.width = perc;
+                progressBar.innerHTML = perc + " (" + (fileIndex + 1) + "/4)";
+            },
             calculateMD5Hash: (image)=>CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image))
         };
         await esploader.writeFlash(flashOptions);
+        successNotice.style.display = "block";
+        disconnectButton.click();
     } catch (e) {
         console.error(e);
         term.writeln(`Error: ${e.message}`);
+        failureNotice.style.display = "block";
+        failureMessage.innerHTML = e.message;
     } finally{
-    // Hide progress bars and show erase buttons
-    //for (let index = 1; index < table.rows.length; index++) {
-    //  table.rows[index].cells[2].style.display = "none";
-    //  table.rows[index].cells[3].style.display = "initial";
-    //}
+        programButton.disabled = false;
+        progressBar.style.width = "0";
+        progressBar.innerHTML = "";
     }
 };
-fetch(releaseURL).then((response)=>response.json()).then((json)=>{
-    json.Configurations.forEach((jsondata)=>{
-        const firmware = {
-            board: jsondata.Board,
-            version: jsondata.Version,
-            url: jsondata.URL,
-            offset: jsondata.Offset,
-            chip: jsondata.Chip
-        };
-        boardFirmwares.push(firmware);
-        if (board.childElementCount == 0) lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
-        const opt = document.createElement("option");
-        opt.value = firmware.board;
-        opt.innerHTML = firmware.board;
-        board.appendChild(opt);
-    });
-});
 
 },{"esptool-js":"GDPH2","web-serial-polyfill":"aEnuJ"}],"GDPH2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
