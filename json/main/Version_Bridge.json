@@ -4,21 +4,21 @@
       "Board": "DevKit",
       "Version": "0.86.99",
       "Description": "ESP32-S3 DevKit / Waveshare",
-      "URL": "https://github.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/raw/refs/heads/main/OTA/Bridge/dev_kit/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/Bridge/dev_kit/firmware.bin",
       "Chip": "ESP32-S3"
     },
     {
       "Board": "Bridge_FANATEC",
       "Version": "0.86.99",
       "Description": "Fanatec Bridge",
-      "URL": "https://github.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/raw/refs/heads/main/OTA/Bridge/Fanatec_Bridge/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/Bridge/Fanatec_Bridge/firmware.bin",
       "Chip": "ESP32-S3"
     },
     {
       "Board": "Gilphilbert_Dongle",
       "Version": "0.86.99",
       "Description": "Dongle v1",
-      "URL": "https://github.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/raw/refs/heads/main/OTA/Bridge/Gilphilbert_dongle/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/Bridge/Gilphilbert_dongle/firmware.bin",
       "Chip": "ESP32-S3"
     }
   ]
