@@ -4,29 +4,105 @@
             "Board": "PCBAv1",
             "Version": "0.87.1",
             "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
-            "Offset": "0x0000",
-            "Chip": "ESP32-S3"
-        },    
+            "WebFlasher": {
+                "Files": [
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/bootloader.bin",
+                        "Offset": "0000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/partitions.bin",
+                        "Offset": "8000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/boot_app0.bin",
+                        "Offset": "e000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
+                        "Offset": "10000"
+                    }
+                ],
+                "Chip": "ESP32-S3"
+            }
+        },
         {
             "Board": "V3",
             "Version": "0.87.1",
             "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/firmware.bin",
-            "Offset": "0x1000",
-            "Chip": "ESP32-D0WD"
+            "WebFlasher": {
+                "Files": [
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/bootloader.bin",
+                        "Offset": "1000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/partitions.bin",
+                        "Offset": "8000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/boot_app0.bin",
+                        "Offset": "e000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/firmware.bin",
+                        "Offset": "10000"
+                    }
+                ],
+                "Chip": "ESP32-D0WD"
+            }
         },
         {
             "Board": "V4",
             "Version": "0.87.1",
             "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32S3/firmware.bin",
-            "Offset": "0x0000",
-            "Chip": "ESP32-S3"
+            "WebFlasher": {
+                "Files": [
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32s3/bootloader.bin",
+                        "Offset": "0000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32s3/partitions.bin",
+                        "Offset": "8000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32s3/boot_app0.bin",
+                        "Offset": "e000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32s3/firmware.bin",
+                        "Offset": "10000"
+                    }
+                ],
+                "Chip": "ESP32-S3"
+            }
         },
         {
             "Board": "Speedcrafter",
             "Version": "0.87.1",
             "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/firmware.bin",
-            "Offset": "0x1000",
-            "Chip": "ESP32-D0WD"
+            "WebFlasher": {
+                "Files": [
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/bootloader.bin",
+                        "Offset": "1000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/partitions.bin",
+                        "Offset": "8000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/boot_app0.bin",
+                        "Offset": "e000"
+                    },
+                    {
+                        "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/firmware.bin",
+                        "Offset": "10000"
+                    }
+                ],
+                "Chip": "ESP32-D0WD"
+            }
         }
     ]
 }

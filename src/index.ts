@@ -23,6 +23,9 @@ declare let CryptoJS; // CryptoJS is imported in HTML script
 const term = new Terminal({ cols: 80, rows: 24, 'theme': { background: '#333' } });
 term.open(terminal);
 
+const releaseURL:string = "https://raw.githubusercontent.com/gilphilbert/pedal-flasher/refs/heads/main/json/develop.json";
+//const developURL:string = "../json/develop.json"
+
 let device = null;
 let transport: Transport;
 let chip: string = null;
@@ -139,6 +142,16 @@ disconnectButton.onclick = async () => {
   cleanUp();
 };
 
+async function getFile(url:string) {
+  let response = await fetch(url);
+  let data = await response.blob();
+  let metadata = {
+    type: data.type
+  };
+  return new File([data], "firmware.bin", metadata);
+  // ... do something with the file or return it
+}
+
 /**
  * Validate the provided files images and offset to see if they're valid.
  * @returns {string} Program input validation result
@@ -168,8 +181,11 @@ programButton.onclick = async () => {
   alertDiv.style.display = "none";
 
   const fileArray = [];
-  const progressBars = [];
+  //const progressBars = [];
 
+  const firmwareFile:File = await getFile(boardFirmwares[board.selectedIndex].url);
+
+  fileArray.push({ data: await firmwareFile.text(), address: "0" /*boardFirmwares[board.selectedIndex].offset*/ })
   /*
   for (let index = 1; index < table.rows.length; index++) {
     const row = table.rows[index];
@@ -190,15 +206,16 @@ programButton.onclick = async () => {
   }
   */
 
+  
   try {
     const flashOptions: FlashOptions = {
       fileArray: fileArray,
       flashSize: "keep",
       eraseAll: false,
       compress: true,
-      reportProgress: (fileIndex, written, total) => {
-        progressBars[fileIndex].value = (written / total) * 100;
-      },
+      //reportProgress: (fileIndex, written, total) => {
+      //  progressBars[fileIndex].value = (written / total) * 100;
+      //},
       calculateMD5Hash: (image) => CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image)),
     } as FlashOptions;
     await esploader.writeFlash(flashOptions);
@@ -212,46 +229,15 @@ programButton.onclick = async () => {
     //  table.rows[index].cells[3].style.display = "initial";
     //}
   }
+  
 };
 
-const JSONData = {
-  "Configurations": [
-    {
-      "Config": "V3",
-      "Version": "0.87.1",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/firmware.bin",
-      "Offset": "0x1000",
-      "Chip": "ESP32-D0WD"
-    },
-    {
-      "Config": "V4",
-      "Version": "0.87.1",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32S3/firmware.bin",
-      "Offset": "0x0000",
-      "Chip": "ESP32-S3"
-    },
-    {
-      "Config": "Speedcrafter",
-      "Version": "0.87.1",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/firmware.bin",
-      "Offset": "0x1000",
-      "Chip": "ESP32-D0WD"
-    },
-    {
-      "Config": "PCBAv1",
-      "Version": "0.87.1",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
-      "Offset": "0x0000",
-      "Chip": "ESP32-S3"
-    }
-  ]
-}
-//fetch("https://raw.githubusercontent.com/tcfshcrw/FFBPedalOTA_Json/main/JSON/dev/ControlBoard/Version_esp32.json")
-//  .then(response => response.json())
-//  .then(json => {
-    JSONData.Configurations.forEach(jsondata => {
+fetch(releaseURL)
+  .then(response => response.json())
+  .then(json => {
+    json.Configurations.forEach(jsondata => {
       const firmware:BoardFirmware = {
-        board: jsondata.Config,
+        board: jsondata.Board,
         version: jsondata.Version,
         url: jsondata.URL,
         offset: jsondata.Offset,
@@ -263,10 +249,10 @@ const JSONData = {
         lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
 
       const opt:HTMLOptionElement = document.createElement('option');
-      opt.value = jsondata.Config;
-      opt.innerHTML = jsondata.Config;
+      opt.value = firmware.board;
+      opt.innerHTML = firmware.board;
       board.appendChild(opt);
 
     });
 
-//  });
+  });
