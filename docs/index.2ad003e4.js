@@ -7351,7 +7351,9 @@ $382e02c9bbd5d50b$var$successNotice.style.display = "none";
 $382e02c9bbd5d50b$var$failureNotice.style.display = "none";
 const $382e02c9bbd5d50b$var$espLoaderTerminal = {
     clean () {
-        $382e02c9bbd5d50b$var$term.clear();
+    //this is called automatically after the flash is called
+    //we will remove it for now since we don't want it to be cleared
+    //term.clear()
     },
     writeLine (data) {
         $382e02c9bbd5d50b$var$term.writeln(data);
@@ -7408,6 +7410,7 @@ $382e02c9bbd5d50b$var$connectButton.onclick = async ()=>{
     }
     try {
         $382e02c9bbd5d50b$var$connectButton.value = "Connecting...";
+        $382e02c9bbd5d50b$var$term.clear();
         const flashOptions = {
             transport: $382e02c9bbd5d50b$var$transport,
             baudrate: 921600,
@@ -7540,4 +7543,4 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
 };
 
 
-//# sourceMappingURL=index.fe54452c.js.map
+//# sourceMappingURL=index.2ad003e4.js.map
