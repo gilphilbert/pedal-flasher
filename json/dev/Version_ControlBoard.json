@@ -4,36 +4,36 @@
       "Board": "V3_ESP32",
       "Version": "0.87.2",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32/firmware.bin",
-      "Offset": "0x1000",
-      "Chip": "ESP32-D0WD"
+      "Chip": "ESP32-D0WD",
+      "Description": "V3 PCB"
     },
     {
       "Board": "V4_ESP32S3",
       "Version": "0.87.2",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/esp32S3/firmware.bin",
-      "Offset": "0x0000",
-      "Chip": "ESP32-S3"
+      "Chip": "ESP32-S3",
+      "Description": "V4 PCB"
     },
     {
       "Board": "Speedcrafter",
       "Version": "0.87.2",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Speedcrafter/firmware.bin",
-      "Offset": "0x1000",
-      "Chip": "ESP32-D0WD"
+      "Chip": "ESP32-D0WD",
+      "Description": "Speedcrafter"
     },
     {
       "Board": "Gilphilbert_PCBAv1",
       "Version": "0.87.2",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
-      "Offset": "0x0000",
-      "Chip": "ESP32-S3"
+      "Chip": "ESP32-S3",
+      "Description": "PCBA v1.x"
     },
 	{
       "Board": "Gilphilbert_PCBAv2",
       "Version": "0.87.2",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/develop/OTA/ControlBoard/Gilphilbert_2_0/firmware.bin",
-      "Offset": "0x0000",
-      "Chip": "ESP32-S3"
+      "Chip": "ESP32-S3",
+      "Description": "PCBA v2.x"
     }
   ]
 }
