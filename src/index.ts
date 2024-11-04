@@ -91,25 +91,27 @@ function getFirmwareJSON() {
       boardFirmwares = []
 
       json.Configurations.forEach(jsondata => {
-        const firmware:BoardFirmware = {
-          board: jsondata.Board,
-          description: jsondata.Description,
-          version: jsondata.Version,
-          url: jsondata.URL.slice(0, jsondata.URL.lastIndexOf("/") + 1),
-          chip: jsondata.Chip
+        if (jsondata.board != "Gilphilbert_PCBAv2") {
+          const firmware:BoardFirmware = {
+            board: jsondata.Board,
+            description: jsondata.Description,
+            version: jsondata.Version,
+            url: jsondata.URL.slice(0, jsondata.URL.lastIndexOf("/") + 1),
+            chip: jsondata.Chip
+          }
+          boardFirmwares.push(firmware)
+
+          if (board.childElementCount == 0)
+            lblFirmwareVersion.innerText = "Firmware version: " + firmware.version
+
+          const opt:HTMLOptionElement = document.createElement('option')
+          opt.value = firmware.board
+          opt.innerHTML = firmware.description
+          opt.disabled = chip.startsWith(firmware.chip) ? false : true
+          board.appendChild(opt)
+
+          optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false
         }
-        boardFirmwares.push(firmware)
-
-        if (board.childElementCount == 0)
-          lblFirmwareVersion.innerText = "Firmware version: " + firmware.version
-
-        const opt:HTMLOptionElement = document.createElement('option')
-        opt.value = firmware.board
-        opt.innerHTML = firmware.description
-        opt.disabled = chip.startsWith(firmware.chip) ? false : true
-        board.appendChild(opt)
-
-        optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false
       })
       programButton.disabled = !optionEnabled
     })
@@ -274,5 +276,4 @@ programButton.onclick = async () => {
     progressBar.style.width = "0"
     progressBar.innerHTML = ""
   }
-  
 }

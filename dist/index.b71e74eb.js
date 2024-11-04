@@ -658,21 +658,23 @@ function getFirmwareJSON() {
         let optionEnabled = false;
         boardFirmwares = [];
         json.Configurations.forEach((jsondata)=>{
-            const firmware = {
-                board: jsondata.Board,
-                description: jsondata.Description,
-                version: jsondata.Version,
-                url: jsondata.URL.slice(0, jsondata.URL.lastIndexOf("/") + 1),
-                chip: jsondata.Chip
-            };
-            boardFirmwares.push(firmware);
-            if (board.childElementCount == 0) lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
-            const opt = document.createElement("option");
-            opt.value = firmware.board;
-            opt.innerHTML = firmware.description;
-            opt.disabled = chip.startsWith(firmware.chip) ? false : true;
-            board.appendChild(opt);
-            optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false;
+            if (jsondata.board != "Gilphilbert_PCBAv2") {
+                const firmware = {
+                    board: jsondata.Board,
+                    description: jsondata.Description,
+                    version: jsondata.Version,
+                    url: jsondata.URL.slice(0, jsondata.URL.lastIndexOf("/") + 1),
+                    chip: jsondata.Chip
+                };
+                boardFirmwares.push(firmware);
+                if (board.childElementCount == 0) lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
+                const opt = document.createElement("option");
+                opt.value = firmware.board;
+                opt.innerHTML = firmware.description;
+                opt.disabled = chip.startsWith(firmware.chip) ? false : true;
+                board.appendChild(opt);
+                optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false;
+            }
         });
         programButton.disabled = !optionEnabled;
     });
