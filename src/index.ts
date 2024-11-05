@@ -219,6 +219,8 @@ programButton.onclick = async () => {
   const alertMsg = document.getElementById("alertmsg")
   const err = validateProgramInputs()
 
+  fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts/up")
+
   programButton.disabled = true
   successNotice.style.display = "none"
   failureNotice.style.display = "none"
@@ -266,11 +268,14 @@ programButton.onclick = async () => {
     await esploader.writeFlash(flashOptions)
     successNotice.style.display = "block"
     disconnectButton.click()
+
+    fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success/up")
   } catch (e) {
     console.error(e)
     term.writeln(`Error: ${e.message}`)
     failureNotice.style.display = "block"
     failureMessage.innerHTML = e.message
+    fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-failures/up")
   } finally {
     programButton.disabled = false
     progressBar.style.width = "0"
