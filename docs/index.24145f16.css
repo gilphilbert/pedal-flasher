@@ -126,4 +126,25 @@ div.section.gray {
   height: 100%;
   font-weight: 700;
 }
-/*# sourceMappingURL=index.d3d6d8dd.css.map */
+
+div.stats {
+  background-color: #f4f5f6;
+  width: auto;
+  height: auto;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+div.stats p {
+  margin: 0;
+  padding: 0;
+  font-size: 80%;
+  font-weight: 700;
+}
+
+div.stats p span {
+  font-weight: normal;
+}
+/*# sourceMappingURL=index.24145f16.css.map */

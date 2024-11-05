@@ -15,6 +15,12 @@ const successNotice = document.getElementById('successNotice') as HTMLDivElement
 const failureNotice = document.getElementById('failureNotice') as HTMLDivElement
 const failureMessage = document.getElementById('failureMessage') as HTMLParagraphElement
 
+const pageStats = {
+  flashAttempts: 0,
+  flashSuccesses: 0,
+  pageHits: 0
+}
+
 import { ESPLoader, FlashOptions, LoaderOptions, Transport } from "esptool-js"
 import { serial } from "web-serial-polyfill"
 if (!navigator.serial && navigator.usb) navigator.serial = serial
@@ -77,9 +83,6 @@ const espLoaderTerminal = {
 }
 
 function getFirmwareJSON() {
-  console.log(boardType.value)
-  console.log(channel.value)
-  console.log(urls[boardType.value][channel.value])
   fetch(urls[boardType.value][channel.value])
     .then(response => response.json())
     .then(json => {
@@ -163,8 +166,6 @@ connectButton.onclick = async () => {
     term.writeln(`Error: ${e.message}`)
     connectButton.value = "Connect"
   }
-
-  console.log("Settings done for :" + chip)
 }
 
 /**
@@ -275,10 +276,38 @@ programButton.onclick = async () => {
     term.writeln(`Error: ${e.message}`)
     failureNotice.style.display = "block"
     failureMessage.innerHTML = e.message
-    fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-failures/up")
   } finally {
     programButton.disabled = false
     progressBar.style.width = "0"
     progressBar.innerHTML = ""
   }
 }
+
+async function getPageStats() {
+  let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up")
+  let data = await response.json()
+  console.log(data.count)
+  if (Object.keys(data).includes('count')) {
+    pageStats.pageHits = data.count
+  }
+
+  response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts")
+  data = await response.json()
+  console.log(data.count)
+  if (Object.keys(data).includes('count')) {
+    pageStats.flashAttempts = data.count
+  }
+
+  response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success")
+  data = await response.json()
+  console.log(data.count)
+  if (Object.keys(data).includes('count')) {
+    pageStats.flashSuccesses = data.count
+  }
+
+  document.getElementById('pageHits').innerHTML = pageStats.pageHits.toString()
+  document.getElementById('pageFlashes').innerHTML = pageStats.flashAttempts.toString()
+  document.getElementById('pageSuccessRate').innerHTML = ((pageStats.flashAttempts / pageStats.flashAttempts) * 100).toString() + '%' 
+}
+
+getPageStats()

@@ -7316,6 +7316,11 @@ const $382e02c9bbd5d50b$var$progressBar = document.getElementById("progressBar")
 const $382e02c9bbd5d50b$var$successNotice = document.getElementById("successNotice");
 const $382e02c9bbd5d50b$var$failureNotice = document.getElementById("failureNotice");
 const $382e02c9bbd5d50b$var$failureMessage = document.getElementById("failureMessage");
+const $382e02c9bbd5d50b$var$pageStats = {
+    flashAttempts: 0,
+    flashSuccesses: 0,
+    pageHits: 0
+};
 if (!navigator.serial && navigator.usb) navigator.serial = (0, $d2bbb828b377f05f$export$6c2c9a00e27c07e8);
 const $382e02c9bbd5d50b$var$term = new Terminal({
     cols: 80,
@@ -7363,9 +7368,6 @@ const $382e02c9bbd5d50b$var$espLoaderTerminal = {
     }
 };
 function $382e02c9bbd5d50b$var$getFirmwareJSON() {
-    console.log($382e02c9bbd5d50b$var$boardType.value);
-    console.log($382e02c9bbd5d50b$var$channel.value);
-    console.log($382e02c9bbd5d50b$var$urls[$382e02c9bbd5d50b$var$boardType.value][$382e02c9bbd5d50b$var$channel.value]);
     fetch($382e02c9bbd5d50b$var$urls[$382e02c9bbd5d50b$var$boardType.value][$382e02c9bbd5d50b$var$channel.value]).then((response)=>response.json()).then((json)=>{
         const len = $382e02c9bbd5d50b$var$board.options.length;
         for(let i = len - 1; i >= 0; i--)$382e02c9bbd5d50b$var$board.options.remove(0);
@@ -7437,7 +7439,6 @@ $382e02c9bbd5d50b$var$connectButton.onclick = async ()=>{
         $382e02c9bbd5d50b$var$term.writeln(`Error: ${e.message}`);
         $382e02c9bbd5d50b$var$connectButton.value = "Connect";
     }
-    console.log("Settings done for :" + $382e02c9bbd5d50b$var$chip);
 };
 /**
  * Clean devices variables on chip disconnect. Remove stale references if any.
@@ -7539,13 +7540,30 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
         $382e02c9bbd5d50b$var$term.writeln(`Error: ${e.message}`);
         $382e02c9bbd5d50b$var$failureNotice.style.display = "block";
         $382e02c9bbd5d50b$var$failureMessage.innerHTML = e.message;
-        fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-failures/up");
     } finally{
         $382e02c9bbd5d50b$var$programButton.disabled = false;
         $382e02c9bbd5d50b$var$progressBar.style.width = "0";
         $382e02c9bbd5d50b$var$progressBar.innerHTML = "";
     }
 };
+async function $382e02c9bbd5d50b$var$getPageStats() {
+    let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up");
+    let data = await response.json();
+    console.log(data.count);
+    if (Object.keys(data).includes("count")) $382e02c9bbd5d50b$var$pageStats.pageHits = data.count;
+    response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts");
+    data = await response.json();
+    console.log(data.count);
+    if (Object.keys(data).includes("count")) $382e02c9bbd5d50b$var$pageStats.flashAttempts = data.count;
+    response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success");
+    data = await response.json();
+    console.log(data.count);
+    if (Object.keys(data).includes("count")) $382e02c9bbd5d50b$var$pageStats.flashSuccesses = data.count;
+    document.getElementById("pageHits").innerHTML = $382e02c9bbd5d50b$var$pageStats.pageHits.toString();
+    document.getElementById("pageFlashes").innerHTML = $382e02c9bbd5d50b$var$pageStats.flashAttempts.toString();
+    document.getElementById("pageSuccessRate").innerHTML = ($382e02c9bbd5d50b$var$pageStats.flashAttempts / $382e02c9bbd5d50b$var$pageStats.flashAttempts * 100).toString() + "%";
+}
+$382e02c9bbd5d50b$var$getPageStats();
 
 
-//# sourceMappingURL=index.f3910d2a.js.map
+//# sourceMappingURL=index.f28bff93.js.map

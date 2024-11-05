@@ -602,6 +602,11 @@ const progressBar = document.getElementById("progressBar");
 const successNotice = document.getElementById("successNotice");
 const failureNotice = document.getElementById("failureNotice");
 const failureMessage = document.getElementById("failureMessage");
+const pageStats = {
+    flashAttempts: 0,
+    flashSuccesses: 0,
+    pageHits: 0
+};
 if (!navigator.serial && navigator.usb) navigator.serial = (0, _webSerialPolyfill.serial);
 const term = new Terminal({
     cols: 80,
@@ -649,9 +654,6 @@ const espLoaderTerminal = {
     }
 };
 function getFirmwareJSON() {
-    console.log(boardType.value);
-    console.log(channel.value);
-    console.log(urls[boardType.value][channel.value]);
     fetch(urls[boardType.value][channel.value]).then((response)=>response.json()).then((json)=>{
         const len = board.options.length;
         for(let i = len - 1; i >= 0; i--)board.options.remove(0);
@@ -723,7 +725,6 @@ connectButton.onclick = async ()=>{
         term.writeln(`Error: ${e.message}`);
         connectButton.value = "Connect";
     }
-    console.log("Settings done for :" + chip);
 };
 /**
  * Clean devices variables on chip disconnect. Remove stale references if any.
@@ -764,6 +765,7 @@ function validateProgramInputs() {
 programButton.onclick = async ()=>{
     const alertMsg = document.getElementById("alertmsg");
     const err = validateProgramInputs();
+    fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts/up");
     programButton.disabled = true;
     successNotice.style.display = "none";
     failureNotice.style.display = "none";
@@ -818,6 +820,7 @@ programButton.onclick = async ()=>{
         await esploader.writeFlash(flashOptions);
         successNotice.style.display = "block";
         disconnectButton.click();
+        fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success/up");
     } catch (e) {
         console.error(e);
         term.writeln(`Error: ${e.message}`);
@@ -829,6 +832,24 @@ programButton.onclick = async ()=>{
         progressBar.innerHTML = "";
     }
 };
+async function getPageStats() {
+    let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up");
+    let data = await response.json();
+    console.log(data.count);
+    if (Object.keys(data).includes("count")) pageStats.pageHits = data.count;
+    response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts");
+    data = await response.json();
+    console.log(data.count);
+    if (Object.keys(data).includes("count")) pageStats.flashAttempts = data.count;
+    response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success");
+    data = await response.json();
+    console.log(data.count);
+    if (Object.keys(data).includes("count")) pageStats.flashSuccesses = data.count;
+    document.getElementById("pageHits").innerHTML = pageStats.pageHits.toString();
+    document.getElementById("pageFlashes").innerHTML = pageStats.flashAttempts.toString();
+    document.getElementById("pageSuccessRate").innerHTML = (pageStats.flashAttempts / pageStats.flashAttempts * 100).toString() + "%";
+}
+getPageStats();
 
 },{"esptool-js":"GDPH2","web-serial-polyfill":"aEnuJ"}],"GDPH2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
