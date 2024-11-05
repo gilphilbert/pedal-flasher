@@ -7478,6 +7478,7 @@ function $382e02c9bbd5d50b$var$validateProgramInputs() {
 $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
     const alertMsg = document.getElementById("alertmsg");
     const err = $382e02c9bbd5d50b$var$validateProgramInputs();
+    fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts/up");
     $382e02c9bbd5d50b$var$programButton.disabled = true;
     $382e02c9bbd5d50b$var$successNotice.style.display = "none";
     $382e02c9bbd5d50b$var$failureNotice.style.display = "none";
@@ -7532,11 +7533,13 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
         await $382e02c9bbd5d50b$var$esploader.writeFlash(flashOptions);
         $382e02c9bbd5d50b$var$successNotice.style.display = "block";
         $382e02c9bbd5d50b$var$disconnectButton.click();
+        fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success/up");
     } catch (e) {
         console.error(e);
         $382e02c9bbd5d50b$var$term.writeln(`Error: ${e.message}`);
         $382e02c9bbd5d50b$var$failureNotice.style.display = "block";
         $382e02c9bbd5d50b$var$failureMessage.innerHTML = e.message;
+        fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-failures/up");
     } finally{
         $382e02c9bbd5d50b$var$programButton.disabled = false;
         $382e02c9bbd5d50b$var$progressBar.style.width = "0";
@@ -7545,4 +7548,4 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
 };
 
 
-//# sourceMappingURL=index.ceb9099e.js.map
+//# sourceMappingURL=index.f3910d2a.js.map
