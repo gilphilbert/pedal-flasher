@@ -5,8 +5,7 @@
       "Version": "0.87.99",
       "GHRelease": "Release_Package_v86",
       "Description": "ESP32-S3 DevKit / Waveshare",
-      "URL": "https://raw.githubusercontent.com/tcfshcrw/playground/refs/heads/main/OTA/Bridge/dev_kit/firmware.bin",
-	  "URL_temp": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/Bridge/dev_kit/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/Bridge/dev_kit/firmware.bin",
       "Chip": "ESP32-S3"
     },
     {
