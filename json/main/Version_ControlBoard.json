@@ -5,7 +5,7 @@
       "Version": "0.87.99",
       "GHRelease": "Release_Package_v87",
       "Description": "V3 PCB",
-      "URL_temp": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/esp32/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/esp32/firmware.bin",
       "Chip": "ESP32-D0WD"
     },
     {
@@ -13,7 +13,7 @@
       "Version": "0.87.99",
       "GHRelease": "Release_Package_v87",
       "Description": "V4 PCB",
-      "URL_temp": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/esp32S3/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/esp32S3/firmware.bin",
       "Chip": "ESP32-S3"
     },
     {
@@ -21,7 +21,7 @@
       "Version": "0.87.99",
       "GHRelease": "Release_Package_v87",
       "Description": "Speedcrafter",
-      "URL_temp": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/Speedcrafter/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/Speedcrafter/firmware.bin",
       "Chip": "ESP32-D0WD"
     },
     {
@@ -29,7 +29,7 @@
       "Version": "0.87.99",
       "GHRelease": "Release_Package_v87",
       "Description": "PCBA v1.x",
-      "URL_temp": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
       "Chip": "ESP32-S3"
     },
 	{
