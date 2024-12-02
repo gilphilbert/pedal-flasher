@@ -41,46 +41,27 @@
 
                         <label id="lblConnTo">Connected device: (none)</label>
 
-                        <div class="row">
-                            <div class="column column-75">
-                                <label for="boardType" id="lblBoardType">Board type</label>
-                                <select name="boardType" id="boardType">
-                                    <option value="control">Control Board</option>
-                                    <option value="bridge">Wireless Controller (Bridge)</option>
-                                </select>
+                        <label for="boardType" id="lblBoardType">Board type:</label>
+                        <select name="boardType" id="boardType">
+                            <option value="control">Control Board</option>
+                            <option value="bridge">Wireless Controller (Bridge)</option>
+                        </select>
 
-                                <label for="channel" id="lblChannel">Channel</label>
-                                <select name="channel" id="channel">
-                                    <option value="main">Stable (Recommended)</option>
-                                    <option value="dev">Development</option>
-                                </select>
+                        <label for="channel" id="lblChannel">Channel:</label>
+                        <select name="channel" id="channel">
+                            <option value="main">Stable (Recommended)</option>
+                            <option value="dev">Development</option>
+                        </select>
 
-                                <label for="boardName" id="lblBoardName">Select a board</label>
-                                <select name="boardName" id="boardName"></select>
-                            </div>
-                            <div class="column column-25">
-                                <img src="../assets/Gilphilbert_PCBAv1.png" id="boardPreviewGilphilbert_PCBAv1" name="boardPreviews" style="display: none" />
-                                <img src="../assets/Speedcrafter.png" id="boardPreviewSpeedcrafter" name="boardPreviews" style="display: none" />
-                                <img src="../assets/V3_ESP32.png" id="boardPreviewV3_ESP32" name="boardPreviews" style="display: none" />
-                                <img src="../assets/V4_ESP32S3.png" id="boardPreviewV4_ESP32S3" name="boardPreviews" style="display: none" />
+                        <label for="boardName" id="lblBoardName">Select a board:</label>
+                        <select name="boardName" id="boardName"></select>
 
-                                <img src="../assets/DevKit.jpg" id="boardPreviewDevKit" name="boardPreviews" style="display: none" />
-                                <img src="../assets/placeholder.png" id="boardPreviewBridge_FANATEC" name="boardPreviews" style="display: none" />
-                                <img src="../assets/placeholder.png" id="boardPreviewGilphilbert_Dongle" name="boardPreviews" style="display: none" />
+                        <label id="lblFirmwareVersion">Firmware version:</label>
 
-                                <img src="../assets/placeholder.png" id="boardPreviewPlaceholder" name="boardPreviews" />
-                            </div>
-                        </div>
+                        <input class="button-primary" type="button" id="programButton" value="Flash Firmware" />
 
-                        <div class="row">
-                            <div class="column column-20">
-                                <input class="button-primary" type="button" id="programButton" value="Flash Firmware" />
-                            </div>
-                            <div class="column column-80">
-                                <div class="progress" id="progress">
-                                    <div class="bar" id="progressBar"></div>
-                                </div>
-                            </div>
+                        <div class="progress" id="progress">
+                            <div class="bar" id="progressBar"></div>
                         </div>
 
                         <div class="callout callout-success" id="successNotice">
