@@ -7309,13 +7309,13 @@ const $382e02c9bbd5d50b$var$alertDiv = document.getElementById("alertDiv");
 const $382e02c9bbd5d50b$var$boardType = document.getElementById("boardType");
 const $382e02c9bbd5d50b$var$board = document.getElementById("boardName");
 const $382e02c9bbd5d50b$var$channel = document.getElementById("channel");
+const $382e02c9bbd5d50b$var$lblFirmwareVersion = document.getElementById("lblFirmwareVersion");
 const $382e02c9bbd5d50b$var$safariWarning = document.getElementById("safariWarning");
 const $382e02c9bbd5d50b$var$consoleButton = document.getElementById("consoleButton");
 const $382e02c9bbd5d50b$var$progressBar = document.getElementById("progressBar");
 const $382e02c9bbd5d50b$var$successNotice = document.getElementById("successNotice");
 const $382e02c9bbd5d50b$var$failureNotice = document.getElementById("failureNotice");
 const $382e02c9bbd5d50b$var$failureMessage = document.getElementById("failureMessage");
-const $382e02c9bbd5d50b$var$boardPreview = document.getElementById("boardPreview");
 const $382e02c9bbd5d50b$var$pageStats = {
     flashAttempts: 0,
     flashSuccesses: 0,
@@ -7383,19 +7383,16 @@ function $382e02c9bbd5d50b$var$getFirmwareJSON() {
                     chip: jsondata.Chip
                 };
                 $382e02c9bbd5d50b$var$boardFirmwares.push(firmware);
+                if ($382e02c9bbd5d50b$var$board.childElementCount == 0) $382e02c9bbd5d50b$var$lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
                 const opt = document.createElement("option");
                 opt.value = firmware.board;
-                opt.innerHTML = firmware.description + " (v" + firmware.version + ")";
+                opt.innerHTML = firmware.description;
                 opt.disabled = $382e02c9bbd5d50b$var$chip.startsWith(firmware.chip) ? false : true;
                 $382e02c9bbd5d50b$var$board.appendChild(opt);
                 optionEnabled = optionEnabled == true ? true : $382e02c9bbd5d50b$var$chip.startsWith(firmware.chip) ? true : false;
             }
         });
         $382e02c9bbd5d50b$var$programButton.disabled = !optionEnabled;
-        document.getElementsByName("boardPreviews").forEach((el)=>{
-            el.style.display = "none";
-        });
-        document.getElementById("boardPreview" + $382e02c9bbd5d50b$var$boardFirmwares[$382e02c9bbd5d50b$var$board.selectedIndex].board).style.display = "block";
     });
 }
 $382e02c9bbd5d50b$var$channel.onchange = ()=>{
@@ -7405,11 +7402,7 @@ $382e02c9bbd5d50b$var$boardType.onchange = ()=>{
     $382e02c9bbd5d50b$var$getFirmwareJSON();
 };
 $382e02c9bbd5d50b$var$board.onchange = ()=>{
-    console.log(JSON.stringify($382e02c9bbd5d50b$var$boardFirmwares[$382e02c9bbd5d50b$var$board.selectedIndex]));
-    document.getElementsByName("boardPreviews").forEach((el)=>{
-        el.style.display = "none";
-    });
-    document.getElementById("boardPreview" + $382e02c9bbd5d50b$var$boardFirmwares[$382e02c9bbd5d50b$var$board.selectedIndex].board).style.display = "block";
+    $382e02c9bbd5d50b$var$lblFirmwareVersion.innerHTML = "Firmware version: " + $382e02c9bbd5d50b$var$boardFirmwares[$382e02c9bbd5d50b$var$board.selectedIndex].version;
 };
 $382e02c9bbd5d50b$var$consoleButton.onclick = ()=>{
     $382e02c9bbd5d50b$var$terminal.style.display = $382e02c9bbd5d50b$var$terminal.style.display == "none" ? "block" : "none";
@@ -7556,12 +7549,15 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
 async function $382e02c9bbd5d50b$var$getPageStats() {
     let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up");
     let data = await response.json();
+    console.log(data.count);
     if (Object.keys(data).includes("count")) $382e02c9bbd5d50b$var$pageStats.pageHits = data.count;
     response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts");
     data = await response.json();
+    console.log(data.count);
     if (Object.keys(data).includes("count")) $382e02c9bbd5d50b$var$pageStats.flashAttempts = data.count;
     response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success");
     data = await response.json();
+    console.log(data.count);
     if (Object.keys(data).includes("count")) $382e02c9bbd5d50b$var$pageStats.flashSuccesses = data.count;
     document.getElementById("pageHits").innerHTML = $382e02c9bbd5d50b$var$pageStats.pageHits.toString();
     document.getElementById("pageFlashes").innerHTML = $382e02c9bbd5d50b$var$pageStats.flashAttempts.toString();
@@ -7570,4 +7566,4 @@ async function $382e02c9bbd5d50b$var$getPageStats() {
 $382e02c9bbd5d50b$var$getPageStats();
 
 
-//# sourceMappingURL=index.84f93bee.js.map
+//# sourceMappingURL=index.f28bff93.js.map
