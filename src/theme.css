@@ -159,3 +159,13 @@ div.stats p {
 div.stats p span {
     font-weight: normal;
 }
+
+#programButton::after {
+    content: '';
+    display: block;
+    position: relative;
+    width: 50%;
+    height: 100%;
+    background-color: red;
+    opacity: 0.3;
+}

@@ -7,10 +7,10 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,700">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
-        <link rel="stylesheet" href="index.24145f16.css">
+        <link rel="stylesheet" href="index.b2ef739d.css">
 
         <link rel="icon" href="favicon.ee2246ac.ico">
-         <script type="module" src="index.runtime.49de4ea9.js"></script><script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
+         <script type="module" src="index.runtime.e09fd763.js"></script><script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
     </head>
     <body>
@@ -41,27 +41,46 @@
 
                         <label id="lblConnTo">Connected device: (none)</label>
 
-                        <label for="boardType" id="lblBoardType">Board type:</label>
-                        <select name="boardType" id="boardType">
-                            <option value="control">Control Board</option>
-                            <option value="bridge">Wireless Controller (Bridge)</option>
-                        </select>
+                        <div class="row">
+                            <div class="column column-75">
+                                <label for="boardType" id="lblBoardType">Board type</label>
+                                <select name="boardType" id="boardType">
+                                    <option value="control">Control Board</option>
+                                    <option value="bridge">Wireless Controller (Bridge)</option>
+                                </select>
 
-                        <label for="channel" id="lblChannel">Channel:</label>
-                        <select name="channel" id="channel">
-                            <option value="main" disabled="">Stable (Recommended) [UNAVAILABLE IN BETA]</option>
-                            <option value="dev">Development</option>
-                        </select>
+                                <label for="channel" id="lblChannel">Channel</label>
+                                <select name="channel" id="channel">
+                                    <option value="main">Stable (Recommended)</option>
+                                    <option value="dev">Development</option>
+                                </select>
 
-                        <label for="boardName" id="lblBoardName">Select a board:</label>
-                        <select name="boardName" id="boardName"></select>
+                                <label for="boardName" id="lblBoardName">Select a board</label>
+                                <select name="boardName" id="boardName"></select>
+                            </div>
+                            <div class="column column-25">
+                                <img src="Gilphilbert_PCBAv1.bd7a2d5e.png" id="boardPreviewGilphilbert_PCBAv1" name="boardPreviews" style="display: none">
+                                <img src="Speedcrafter.1603bb4c.png" id="boardPreviewSpeedcrafter" name="boardPreviews" style="display: none">
+                                <img src="V3_ESP32.86b441e3.png" id="boardPreviewV3_ESP32" name="boardPreviews" style="display: none">
+                                <img src="V4_ESP32S3.578fdb80.png" id="boardPreviewV4_ESP32S3" name="boardPreviews" style="display: none">
 
-                        <label id="lblFirmwareVersion">Firmware version:</label>
+                                <img src="DevKit.64bdcaef.jpg" id="boardPreviewDevKit" name="boardPreviews" style="display: none">
+                                <img src="placeholder.074851a7.png" id="boardPreviewBridge_FANATEC" name="boardPreviews" style="display: none">
+                                <img src="placeholder.074851a7.png" id="boardPreviewGilphilbert_Dongle" name="boardPreviews" style="display: none">
 
-                        <input class="button-primary" type="button" id="programButton" value="Flash Firmware">
+                                <img src="placeholder.074851a7.png" id="boardPreviewPlaceholder" name="boardPreviews">
+                            </div>
+                        </div>
 
-                        <div class="progress" id="progress">
-                            <div class="bar" id="progressBar"></div>
+                        <div class="row">
+                            <div class="column column-20">
+                                <input class="button-primary" type="button" id="programButton" value="Flash Firmware">
+                            </div>
+                            <div class="column column-80">
+                                <div class="progress" id="progress">
+                                    <div class="bar" id="progressBar"></div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="callout callout-success" id="successNotice">
@@ -90,6 +109,6 @@
                 </div>
             </div>
         </div>
-        <script src="index.f28bff93.js" type="module"></script>
+        <script src="index.84f93bee.js" type="module"></script>
     </body>
 </html>

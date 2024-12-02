@@ -147,4 +147,14 @@ div.stats p {
 div.stats p span {
   font-weight: normal;
 }
-/*# sourceMappingURL=index.24145f16.css.map */
+
+#programButton:after {
+  content: "";
+  opacity: .3;
+  background-color: red;
+  width: 50%;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+/*# sourceMappingURL=index.b2ef739d.css.map */

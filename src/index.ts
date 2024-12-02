@@ -7,13 +7,13 @@ const alertDiv = document.getElementById("alertDiv") as HTMLDivElement
 const boardType = document.getElementById('boardType') as HTMLSelectElement
 const board = document.getElementById('boardName') as HTMLSelectElement
 const channel = document.getElementById('channel') as HTMLSelectElement
-const lblFirmwareVersion = document.getElementById('lblFirmwareVersion') as HTMLLabelElement
 const safariWarning = document.getElementById('safariWarning') as HTMLDivElement
 const consoleButton = document.getElementById('consoleButton') as HTMLButtonElement
 const progressBar = document.getElementById('progressBar') as HTMLDivElement
 const successNotice = document.getElementById('successNotice') as HTMLDivElement
 const failureNotice = document.getElementById('failureNotice') as HTMLDivElement
 const failureMessage = document.getElementById('failureMessage') as HTMLParagraphElement
+const boardPreview = document.getElementById('boardPreview') as HTMLImageElement
 
 const pageStats = {
   flashAttempts: 0,
@@ -104,12 +104,9 @@ function getFirmwareJSON() {
           }
           boardFirmwares.push(firmware)
 
-          if (board.childElementCount == 0)
-            lblFirmwareVersion.innerText = "Firmware version: " + firmware.version
-
           const opt:HTMLOptionElement = document.createElement('option')
           opt.value = firmware.board
-          opt.innerHTML = firmware.description
+          opt.innerHTML = firmware.description + ' (v' + firmware.version + ')'
           opt.disabled = chip.startsWith(firmware.chip) ? false : true
           board.appendChild(opt)
 
@@ -117,13 +114,21 @@ function getFirmwareJSON() {
         }
       })
       programButton.disabled = !optionEnabled
+      document.getElementsByName('boardPreviews').forEach(el => {
+        el.style.display = 'none'
+      })
+      document.getElementById('boardPreview' + boardFirmwares[board.selectedIndex].board).style.display = "block"
     })
 }
 
 channel.onchange = () => { getFirmwareJSON() }
-boardType.onchange = () => { getFirmwareJSON()}
+boardType.onchange = () => { getFirmwareJSON() }
 board.onchange = () => {
-  lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version
+  console.log(JSON.stringify(boardFirmwares[board.selectedIndex]))
+  document.getElementsByName('boardPreviews').forEach(el => {
+    el.style.display = 'none'
+  })
+  document.getElementById('boardPreview' + boardFirmwares[board.selectedIndex].board).style.display = "block"
 }
 
 consoleButton.onclick = () => {
@@ -286,21 +291,18 @@ programButton.onclick = async () => {
 async function getPageStats() {
   let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up")
   let data = await response.json()
-  console.log(data.count)
   if (Object.keys(data).includes('count')) {
     pageStats.pageHits = data.count
   }
 
   response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts")
   data = await response.json()
-  console.log(data.count)
   if (Object.keys(data).includes('count')) {
     pageStats.flashAttempts = data.count
   }
 
   response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success")
   data = await response.json()
-  console.log(data.count)
   if (Object.keys(data).includes('count')) {
     pageStats.flashSuccesses = data.count
   }

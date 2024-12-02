@@ -595,13 +595,13 @@ const alertDiv = document.getElementById("alertDiv");
 const boardType = document.getElementById("boardType");
 const board = document.getElementById("boardName");
 const channel = document.getElementById("channel");
-const lblFirmwareVersion = document.getElementById("lblFirmwareVersion");
 const safariWarning = document.getElementById("safariWarning");
 const consoleButton = document.getElementById("consoleButton");
 const progressBar = document.getElementById("progressBar");
 const successNotice = document.getElementById("successNotice");
 const failureNotice = document.getElementById("failureNotice");
 const failureMessage = document.getElementById("failureMessage");
+const boardPreview = document.getElementById("boardPreview");
 const pageStats = {
     flashAttempts: 0,
     flashSuccesses: 0,
@@ -669,16 +669,19 @@ function getFirmwareJSON() {
                     chip: jsondata.Chip
                 };
                 boardFirmwares.push(firmware);
-                if (board.childElementCount == 0) lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
                 const opt = document.createElement("option");
                 opt.value = firmware.board;
-                opt.innerHTML = firmware.description;
+                opt.innerHTML = firmware.description + " (v" + firmware.version + ")";
                 opt.disabled = chip.startsWith(firmware.chip) ? false : true;
                 board.appendChild(opt);
                 optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false;
             }
         });
         programButton.disabled = !optionEnabled;
+        document.getElementsByName("boardPreviews").forEach((el)=>{
+            el.style.display = "none";
+        });
+        document.getElementById("boardPreview" + boardFirmwares[board.selectedIndex].board).style.display = "block";
     });
 }
 channel.onchange = ()=>{
@@ -688,7 +691,11 @@ boardType.onchange = ()=>{
     getFirmwareJSON();
 };
 board.onchange = ()=>{
-    lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version;
+    console.log(JSON.stringify(boardFirmwares[board.selectedIndex]));
+    document.getElementsByName("boardPreviews").forEach((el)=>{
+        el.style.display = "none";
+    });
+    document.getElementById("boardPreview" + boardFirmwares[board.selectedIndex].board).style.display = "block";
 };
 consoleButton.onclick = ()=>{
     terminal.style.display = terminal.style.display == "none" ? "block" : "none";
@@ -835,15 +842,12 @@ programButton.onclick = async ()=>{
 async function getPageStats() {
     let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up");
     let data = await response.json();
-    console.log(data.count);
     if (Object.keys(data).includes("count")) pageStats.pageHits = data.count;
     response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts");
     data = await response.json();
-    console.log(data.count);
     if (Object.keys(data).includes("count")) pageStats.flashAttempts = data.count;
     response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success");
     data = await response.json();
-    console.log(data.count);
     if (Object.keys(data).includes("count")) pageStats.flashSuccesses = data.count;
     document.getElementById("pageHits").innerHTML = pageStats.pageHits.toString();
     document.getElementById("pageFlashes").innerHTML = pageStats.flashAttempts.toString();
