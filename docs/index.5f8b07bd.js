@@ -7316,6 +7316,7 @@ const $382e02c9bbd5d50b$var$progressBar = document.getElementById("progressBar")
 const $382e02c9bbd5d50b$var$successNotice = document.getElementById("successNotice");
 const $382e02c9bbd5d50b$var$failureNotice = document.getElementById("failureNotice");
 const $382e02c9bbd5d50b$var$failureMessage = document.getElementById("failureMessage");
+const $382e02c9bbd5d50b$var$reducedSpeed = document.getElementById("reducedSpeed");
 const $382e02c9bbd5d50b$var$pageStats = {
     flashAttempts: 0,
     flashSuccesses: 0,
@@ -7417,7 +7418,7 @@ $382e02c9bbd5d50b$var$connectButton.onclick = async ()=>{
         $382e02c9bbd5d50b$var$term.clear();
         const flashOptions = {
             transport: $382e02c9bbd5d50b$var$transport,
-            baudrate: 921600,
+            baudrate: $382e02c9bbd5d50b$var$reducedSpeed.checked ? 256000 : 921600,
             terminal: $382e02c9bbd5d50b$var$espLoaderTerminal,
             debugLogging: false //debugLogging: debugLogging.checked,
         };
@@ -7449,7 +7450,6 @@ $382e02c9bbd5d50b$var$connectButton.onclick = async ()=>{
 }
 $382e02c9bbd5d50b$var$disconnectButton.onclick = async ()=>{
     if ($382e02c9bbd5d50b$var$transport) await $382e02c9bbd5d50b$var$transport.disconnect();
-    $382e02c9bbd5d50b$var$term.reset();
     $382e02c9bbd5d50b$var$connectButton.style.display = "initial";
     $382e02c9bbd5d50b$var$disconnectButton.style.display = "none";
     $382e02c9bbd5d50b$var$programButton.disabled = true;
@@ -7477,6 +7477,7 @@ function $382e02c9bbd5d50b$var$validateProgramInputs() {
     return "Incorrect chip for this board";
 }
 $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
+    $382e02c9bbd5d50b$var$term.reset();
     const alertMsg = document.getElementById("alertmsg");
     const err = $382e02c9bbd5d50b$var$validateProgramInputs();
     fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts/up");
@@ -7564,6 +7565,14 @@ async function $382e02c9bbd5d50b$var$getPageStats() {
     document.getElementById("pageSuccessRate").innerHTML = ($382e02c9bbd5d50b$var$pageStats.flashAttempts / $382e02c9bbd5d50b$var$pageStats.flashAttempts * 100).toString() + "%";
 }
 $382e02c9bbd5d50b$var$getPageStats();
+const $382e02c9bbd5d50b$var$acc = document.getElementsByClassName("accordion");
+for(let i = 0; i < $382e02c9bbd5d50b$var$acc.length; i++)$382e02c9bbd5d50b$var$acc[i].addEventListener("click", function(e) {
+    e.preventDefault();
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") panel.style.display = "none";
+    else panel.style.display = "block";
+});
 
 
-//# sourceMappingURL=index.f28bff93.js.map
+//# sourceMappingURL=index.5f8b07bd.js.map

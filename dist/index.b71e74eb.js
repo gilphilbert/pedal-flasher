@@ -595,13 +595,14 @@ const alertDiv = document.getElementById("alertDiv");
 const boardType = document.getElementById("boardType");
 const board = document.getElementById("boardName");
 const channel = document.getElementById("channel");
+const lblFirmwareVersion = document.getElementById("lblFirmwareVersion");
 const safariWarning = document.getElementById("safariWarning");
 const consoleButton = document.getElementById("consoleButton");
 const progressBar = document.getElementById("progressBar");
 const successNotice = document.getElementById("successNotice");
 const failureNotice = document.getElementById("failureNotice");
 const failureMessage = document.getElementById("failureMessage");
-const boardPreview = document.getElementById("boardPreview");
+const reducedSpeed = document.getElementById("reducedSpeed");
 const pageStats = {
     flashAttempts: 0,
     flashSuccesses: 0,
@@ -669,19 +670,16 @@ function getFirmwareJSON() {
                     chip: jsondata.Chip
                 };
                 boardFirmwares.push(firmware);
+                if (board.childElementCount == 0) lblFirmwareVersion.innerText = "Firmware version: " + firmware.version;
                 const opt = document.createElement("option");
                 opt.value = firmware.board;
-                opt.innerHTML = firmware.description + " (v" + firmware.version + ")";
+                opt.innerHTML = firmware.description;
                 opt.disabled = chip.startsWith(firmware.chip) ? false : true;
                 board.appendChild(opt);
                 optionEnabled = optionEnabled == true ? true : chip.startsWith(firmware.chip) ? true : false;
             }
         });
         programButton.disabled = !optionEnabled;
-        document.getElementsByName("boardPreviews").forEach((el)=>{
-            el.style.display = "none";
-        });
-        document.getElementById("boardPreview" + boardFirmwares[board.selectedIndex].board).style.display = "block";
     });
 }
 channel.onchange = ()=>{
@@ -691,11 +689,7 @@ boardType.onchange = ()=>{
     getFirmwareJSON();
 };
 board.onchange = ()=>{
-    console.log(JSON.stringify(boardFirmwares[board.selectedIndex]));
-    document.getElementsByName("boardPreviews").forEach((el)=>{
-        el.style.display = "none";
-    });
-    document.getElementById("boardPreview" + boardFirmwares[board.selectedIndex].board).style.display = "block";
+    lblFirmwareVersion.innerHTML = "Firmware version: " + boardFirmwares[board.selectedIndex].version;
 };
 consoleButton.onclick = ()=>{
     terminal.style.display = terminal.style.display == "none" ? "block" : "none";
@@ -710,7 +704,7 @@ connectButton.onclick = async ()=>{
         term.clear();
         const flashOptions = {
             transport,
-            baudrate: 921600,
+            baudrate: reducedSpeed.checked ? 256000 : 921600,
             terminal: espLoaderTerminal,
             debugLogging: false //debugLogging: debugLogging.checked,
         };
@@ -742,7 +736,6 @@ connectButton.onclick = async ()=>{
 }
 disconnectButton.onclick = async ()=>{
     if (transport) await transport.disconnect();
-    term.reset();
     connectButton.style.display = "initial";
     disconnectButton.style.display = "none";
     programButton.disabled = true;
@@ -770,6 +763,7 @@ function validateProgramInputs() {
     return "Incorrect chip for this board";
 }
 programButton.onclick = async ()=>{
+    term.reset();
     const alertMsg = document.getElementById("alertmsg");
     const err = validateProgramInputs();
     fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts/up");
@@ -842,18 +836,29 @@ programButton.onclick = async ()=>{
 async function getPageStats() {
     let response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/hits/up");
     let data = await response.json();
+    console.log(data.count);
     if (Object.keys(data).includes("count")) pageStats.pageHits = data.count;
     response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-attempts");
     data = await response.json();
+    console.log(data.count);
     if (Object.keys(data).includes("count")) pageStats.flashAttempts = data.count;
     response = await fetch("https://api.counterapi.dev/v1/diy-ffb-pedal-webflash/flash-success");
     data = await response.json();
+    console.log(data.count);
     if (Object.keys(data).includes("count")) pageStats.flashSuccesses = data.count;
     document.getElementById("pageHits").innerHTML = pageStats.pageHits.toString();
     document.getElementById("pageFlashes").innerHTML = pageStats.flashAttempts.toString();
     document.getElementById("pageSuccessRate").innerHTML = (pageStats.flashAttempts / pageStats.flashAttempts * 100).toString() + "%";
 }
 getPageStats();
+const acc = document.getElementsByClassName("accordion");
+for(let i = 0; i < acc.length; i++)acc[i].addEventListener("click", function(e) {
+    e.preventDefault();
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") panel.style.display = "none";
+    else panel.style.display = "block";
+});
 
 },{"esptool-js":"GDPH2","web-serial-polyfill":"aEnuJ"}],"GDPH2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

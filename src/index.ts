@@ -15,6 +15,8 @@ const successNotice = document.getElementById('successNotice') as HTMLDivElement
 const failureNotice = document.getElementById('failureNotice') as HTMLDivElement
 const failureMessage = document.getElementById('failureMessage') as HTMLParagraphElement
 
+const reducedSpeed = document.getElementById('reducedSpeed') as HTMLInputElement
+
 const pageStats = {
   flashAttempts: 0,
   flashSuccesses: 0,
@@ -141,7 +143,7 @@ connectButton.onclick = async () => {
     term.clear()
     const flashOptions = {
       transport,
-      baudrate: 921600,
+      baudrate: reducedSpeed.checked ? 256000 : 921600,
       terminal: espLoaderTerminal,
       debugLogging: false  //debugLogging: debugLogging.checked,
     } as LoaderOptions
@@ -180,7 +182,6 @@ function cleanUp() {
 disconnectButton.onclick = async () => {
   if (transport) await transport.disconnect()
 
-  term.reset()
   connectButton.style.display = "initial"
   disconnectButton.style.display = "none"
   programButton.disabled = true
@@ -217,6 +218,8 @@ function validateProgramInputs() {
 }
 
 programButton.onclick = async () => {
+  term.reset()
+
   const alertMsg = document.getElementById("alertmsg")
   const err = validateProgramInputs()
 
@@ -252,7 +255,6 @@ programButton.onclick = async () => {
     fileArray.push({ data: await getFile(el.file), address: el.offset })
   }
 
-  
   try {
     const flashOptions: FlashOptions = {
       fileArray: fileArray,
@@ -309,5 +311,20 @@ async function getPageStats() {
   document.getElementById('pageFlashes').innerHTML = pageStats.flashAttempts.toString()
   document.getElementById('pageSuccessRate').innerHTML = ((pageStats.flashAttempts / pageStats.flashAttempts) * 100).toString() + '%' 
 }
-
 getPageStats()
+
+const acc = document.getElementsByClassName("accordion")
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function(e) {
+    e.preventDefault()
+
+    this.classList.toggle("active")
+
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none"
+    } else {
+      panel.style.display = "block"
+    }
+  })
+}
