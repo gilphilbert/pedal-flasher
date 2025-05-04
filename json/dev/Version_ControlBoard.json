@@ -2,7 +2,7 @@
   "Configurations": [
     {
       "Board": "V3_ESP32",
-      "Version": "0.90.01",
+      "Version": "0.90.02",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/ControlBoard/esp32/firmware.bin",
       "Chip": "ESP32-D0WD",
@@ -10,7 +10,7 @@
     },
     {
       "Board": "V4_ESP32S3",
-      "Version": "0.90.01",
+      "Version": "0.90.02",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/ControlBoard/esp32S3/firmware.bin",
       "Chip": "ESP32-S3",
@@ -18,7 +18,7 @@
     },
     {
       "Board": "V5_ESP32S3",
-      "Version": "0.90.01",
+      "Version": "0.90.02",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/ControlBoard/esp32S3_V5/firmware.bin",
       "Chip": "ESP32-S3",
@@ -26,7 +26,7 @@
     },
     {
       "Board": "Speedcrafter",
-      "Version": "0.90.01",
+      "Version": "0.90.02",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/ControlBoard/Speedcrafter/firmware.bin",
       "Chip": "ESP32-D0WD",
@@ -34,7 +34,7 @@
     },
     {
       "Board": "Gilphilbert_PCBAv1",
-      "Version": "0.90.01",
+      "Version": "0.90.02",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/ControlBoard/Gilphilbert_1_2/firmware.bin",
       "Chip": "ESP32-S3",
@@ -42,11 +42,11 @@
     },
 	{
       "Board": "Gilphilbert_PCBAv2",
-      "Version": "0.90.01",
+      "Version": "0.90.02",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/ControlBoard/Gilphilbert_2_0/firmware.bin",
       "Chip": "ESP32-S3",
-      "Description": "PCBA v2.x(For testing only, no release yet, do not select this one)"
+      "Description": "PCBA v2.x(RC)"
     }
   ]
 }
