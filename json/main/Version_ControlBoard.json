@@ -25,6 +25,14 @@
       "Description": "V5 PCB"
     },
     {
+      "Board": "V5_ESP32S3_Without_Wireless",
+      "Version": "0.89.99",
+      "GHRelease": "Develop_Package_v20241102.083116",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/esp32S3_V5_without_wireless/firmware.bin",
+      "Chip": "ESP32-S3",
+      "Description": "V5 PCB"
+    },
+    {
       "Board": "Speedcrafter",
       "Version": "0.89.99",
       "GHRelease": "Release_Package_v88",
@@ -47,6 +55,14 @@
       "Description": "PCBA v2.x",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/Gilphilbert_2_0/firmware.bin",
       "Chip": "ESP32-S3"
+    },
+	{
+      "Board": "Gilphilbert_PCBAv2_Without_Wireless",
+      "Version": "0.90.03",
+      "GHRelease": "Develop_Package_v20241102.083116",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/Gilphilbert_2_0_without_wireless/firmware.bin",
+      "Chip": "ESP32-S3",
+      "Description": "PCBA v2.x(RC) WITHOUT WIRELESS SUPPORT"
     }
   ]
 }

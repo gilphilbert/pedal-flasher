@@ -9,6 +9,14 @@
       "Chip": "ESP32-S3"
     },
     {
+      "Board": "Bridge_with_external_Joystick",
+      "Version": "0.90.04",
+      "GHRelease": "Develop_Package_v20241102.083116",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/Bridge/dev_kit_with_external_joystick/firmware.bin",
+      "Chip": "ESP32-S3",
+      "Description": "ESP32-S3 Bridge with external Joystick"
+    },
+    {
       "Board": "Bridge_FANATEC",
       "Version": "0.89.99",
       "GHRelease": "Release_Package_v86",
