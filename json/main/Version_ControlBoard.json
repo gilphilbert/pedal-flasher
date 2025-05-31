@@ -30,7 +30,7 @@
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/main/OTA/ControlBoard/esp32S3_V5_without_wireless/firmware.bin",
       "Chip": "ESP32-S3",
-      "Description": "V5 PCB"
+      "Description": "V5 PCB WITHOUT WIRELESS SUPPORT"
     },
     {
       "Board": "Speedcrafter",
