@@ -4,7 +4,7 @@
       "Board": "DevKit",
       "Version": "0.90.07",
       "GHRelease": "Develop_Package_v20241102.083116",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/Bridge/dev_kit/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/Bridge/dev_kit/firmware.bin",
       "Chip": "ESP32-S3",
       "Description": "ESP32-S3 DevKit"
     },
@@ -12,15 +12,15 @@
       "Board": "Bridge_with_external_Joystick",
       "Version": "0.90.07",
       "GHRelease": "Develop_Package_v20241102.083116",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/Bridge/dev_kit_with_external_joystick/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/Bridge/dev_kit_with_external_joystick/firmware.bin",
       "Chip": "ESP32-S3",
-      "Description": "ESP32-S3 Bridge with external Joystick"
+      "Description": "ESP32-S3 DevKit"
     },
     {
       "Board": "Bridge_FANATEC",
       "Version": "0.90.07",
       "GHRelease": "Develop_Package_v20241102.083116",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/Bridge/Fanatec_Bridge/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/Bridge/Fanatec_Bridge/firmware.bin",
       "Chip": "ESP32-S3",
       "Description": "Fanatec Bridge"
     },
@@ -28,7 +28,7 @@
       "Board": "Gilphilbert_Dongle",
       "Version": "0.90.07",
       "GHRelease": "Develop_Package_v20241102.083116",
-      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/Bridge/Gilphilbert_dongle/firmware.bin",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/Bridge/Gilphilbert_dongle/firmware.bin",
       "Chip": "ESP32-S3",
       "Description": "Dongle v1"
     }
