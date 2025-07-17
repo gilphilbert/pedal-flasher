@@ -38,7 +38,7 @@
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/esp32S3_V6_without_wireless/firmware.bin",
       "Chip": "ESP32-S3",
-      "Description": "V5 PCB WITHOUT WIRELESS"
+      "Description": "V6 PCB WITHOUT WIRELESS"
     },
     {
       "Board": "V6_ESP32S3",
@@ -46,7 +46,7 @@
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/esp32S3_V6/firmware.bin",
       "Chip": "ESP32-S3",
-      "Description": "V5 PCB WITH WIRELESS SUPPORT"
+      "Description": "V6 PCB WITH WIRELESS SUPPORT"
     },
     {
       "Board": "Speedcrafter",
