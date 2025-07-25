@@ -2,7 +2,7 @@
   "Configurations": [
     {
       "Board": "V3_ESP32",
-      "Version": "0.90.13",
+      "Version": "0.90.14",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/esp32/firmware.bin",
       "Chip": "ESP32-D0WD",
@@ -10,7 +10,7 @@
     },
     {
       "Board": "V4_ESP32S3",
-      "Version": "0.90.13",
+      "Version": "0.90.14",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/esp32S3/firmware.bin",
       "Chip": "ESP32-S3",
@@ -18,7 +18,7 @@
     },
     {
       "Board": "V5_ESP32S3_Without_Wireless",
-      "Version": "0.90.13",
+      "Version": "0.90.14",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/esp32S3_V5_without_wireless/firmware.bin",
       "Chip": "ESP32-S3",
