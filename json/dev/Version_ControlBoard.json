@@ -2,7 +2,7 @@
   "Configurations": [
     {
       "Board": "V3_ESP32",
-      "Version": "0.90.20",
+      "Version": "0.90.15",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/esp32/firmware.bin",
       "Chip": "ESP32-D0WD",
@@ -50,7 +50,7 @@
     },
     {
       "Board": "Speedcrafter",
-      "Version": "0.90.20",
+      "Version": "0.90.15",
       "GHRelease": "Develop_Package_v20241102.083116",
       "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/DailyBuild/ControlBoard/Speedcrafter/firmware.bin",
       "Chip": "ESP32-D0WD",
