@@ -8,6 +8,14 @@
       "Chip": "ESP32-S3",
       "Description": "ESP32-S3 DevKit"
     },
+	    {
+      "Board": "DevKit_0.90.15",
+      "Version": "0.90.15",
+      "GHRelease": "Develop_Package_v20241102.083116",
+      "URL": "https://raw.githubusercontent.com/ChrGri/DIY-Sim-Racing-FFB-Pedal/refs/heads/develop/OTA/Bridge/dev_kit_09015/firmware.bin",
+      "Chip": "ESP32-S3",
+      "Description": "ESP32-S3 DevKit for the verison 0.90.15"
+    },
     {
       "Board": "Bridge_with_external_Joystick",
       "Version": "0.90.22",
